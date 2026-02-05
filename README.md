@@ -1,163 +1,218 @@
 AI Operations Assistant
 
-A production-ready multi-agent AI system that converts natural language tasks into structured plans, executes real API calls, and verifies results using LLM-powered agents.
 
-The project is designed to demonstrate agent orchestration, backend design, API integrations, and reliability tradeoffs.
+A production-ready multi-agent AI system that plans, executes, and verifies real API calls using LLM-powered agents.
+Designed to demonstrate agent orchestration, API integrations, and clean backend architecture.
 
-🚀 Running the Project (One Command)
 
-After setup, the project runs locally with one command:
+🚀 Quick Start
+# 1. Go to project
+cd ai_ops_assistant
 
+
+# 2. Install dependencies
+pip install -r requirements.txt
+
+
+# 3. Configure environment
+cp .env.example .env
+# Add: GROQ_API_KEY, WEATHER_API_KEY (GitHub token optional)
+
+
+# 4. Run CLI
 python main.py "Find top 3 Python repos and weather in Bangalore" --provider groq
 
-Or start the API server:
 
+# OR start API server
 python main.py --api
-
-Then open: http://localhost:8000/docs
-
-🛠️ Local Setup Instructions (localhost)
-1. Prerequisites
-
-Python 3.10+
-
-pip
-
-Internet connection (for API calls)
-
-2. Clone & Install
-git clone <repo-url>
-cd ai_ops_assistant
-pip install -r requirements.txt
-3. Environment Variables
-
-Create a .env file from the example:
-
-cp .env.example .env
-.env.example
-# LLM Providers (choose at least one)
-OPENAI_API_KEY=
-GEMINI_API_KEY=
-GROQ_API_KEY=
+# Visit: http://localhost:8000/docs
 
 
-# Required external API
-WEATHER_API_KEY=
+🎯 Overview
+
+This project showcases a multi-agent AI Operations system where:
+
+PlannerAgent → Converts user query into a structured JSON plan
+
+ExecutorAgent → Executes real API calls (GitHub, Weather)
+
+VerifierAgent → Validates results and formats final output
+
+The system supports CLI and API modes, multiple LLM providers, and production-grade error handling.
 
 
-# Optional (improves GitHub rate limits)
-GITHUB_TOKEN=
+✨ Key Features
 
-⚠️ Never commit .env to GitHub.
+Multi-agent architecture (Planner / Executor / Verifier)
 
-4. Run Locally
+Real API integrations (GitHub + OpenWeatherMap)
 
-CLI mode
+Supports Groq, OpenAI, Gemini
 
-python main.py "Find top Python repos and weather in Bangalore" --provider groq
+Retry logic with exponential backoff
 
-API mode
+CLI + FastAPI server
 
-python main.py --api
-🏗️ Architecture Overview
+Structured JSON outputs
 
-The system follows a multi-agent architecture:
+Environment-based configuration
 
-Agents
+Clean, extensible architecture
 
-PlannerAgent
 
-Uses an LLM to convert natural language into a structured JSON plan
-
-ExecutorAgent
-
-Executes the plan step-by-step using real APIs
-
-Includes retry logic and error handling
-
-VerifierAgent
-
-Validates completeness
-
-Formats final structured output
-
-Tools
-
-GitHub Tool → Searches repositories
-
-Weather Tool → Fetches real-time weather data
-
-Flow:
-
+🏗️ Architecture Flow
 User Query
-  → PlannerAgent (JSON Plan)
-  → ExecutorAgent (API Calls)
-  → VerifierAgent (Validation)
-  → Final Response
-🔌 Integrated APIs
+   ↓
+PlannerAgent (LLM → JSON Plan)
+   ↓
+ExecutorAgent (API Calls + Retries)
+   ↓
+VerifierAgent (Validation + Formatting)
+   ↓
+Final Structured Response
 
-GitHub REST API
+📁 Project Structure
+ai_ops_assistant/
+├── agents/
+│   ├── planner.py
+│   ├── executor.py
+│   └── verifier.py
+├── tools/
+│   ├── github_tool.py
+│   └── weather_tool.py
+├── llm/
+│   ├── client.py
+│   └── prompts.py
+├── main.py
+├── requirements.txt
+├── .env.example
+└── README.md
 
-Repository search
 
-OpenWeatherMap API
+🔑 Environment Variables
+# LLM (choose one)
+GROQ_API_KEY=...
+OPENAI_API_KEY=...
+GEMINI_API_KEY=...
 
-Current weather data
 
-LLM Providers
+# Required
+WEATHER_API_KEY=...
 
-Groq
 
-OpenAI
+# Optional (rate limits)
+GITHUB_TOKEN=...
 
-Google Gemini
 
-🧪 Example Prompts (3–5)
+🔐 API Key Sources
 
-Use these to test the system:
+Groq: https://console.groq.com/keys
 
-Find top 3 Python repositories on GitHub
-What is the weather in Bangalore?
-Find top 5 JavaScript repos and weather in London
-Show trending machine learning repositories
-Get weather details for Delhi
-⚠️ Known Limitations & Tradeoffs
+OpenWeatherMap: https://openweathermap.org/api
 
-Sequential execution
-API calls are executed sequentially for simplicity (not parallel).
+GitHub Token: https://github.com/settings/tokens
 
-No caching (yet)
-Repeated queries hit external APIs again.
+OpenAI: https://platform.openai.com/api-keys
 
-LLM JSON reliability
-Some LLMs may occasionally return invalid JSON (Groq is most reliable).
+Gemini: https://makersuite.google.com/app/apikey
 
-No authentication layer
-API server is open and intended for local/demo use.
 
-Limited tools
-Only GitHub and Weather APIs are integrated currently.
+💻 Running the Project
+CLI Mode
+python main.py "Find top 3 Python repos and weather in Bangalore" --provider groq
+python main.py "Weather in Delhi" --provider groq
+python main.py --interactive --provider groq
+API Mode (FastAPI)
+python main.py --api
 
-🧠 Design Tradeoffs
+Endpoints:
 
-Chose agent separation over monolithic prompts for clarity and extensibility
+GET / → Health check
 
-Used structured JSON plans to keep execution safe and auditable
+POST /query → Submit query
 
-Prioritized readability and correctness over aggressive optimization
+GET /health → Service status
 
-Designed for easy extension (new tools, agents, APIs)
+GET /docs → Swagger UI
 
-📌 Summary
 
-✅ Runs locally on localhost
+📊 Example Output
+{
+  "status": "success",
+  "results": {
+    "github_repos": [
+      {
+        "name": "vinta/awesome-python",
+        "stars": 281540,
+        "language": "Python"
+      }
+    ],
+    "weather": {
+      "city": "Bengaluru",
+      "temperature": 23.7,
+      "condition": "Clouds",
+      "units": "°C"
+    }
+  },
+  "errors": []
+}
 
-✅ Single-command execution
 
-✅ Multi-agent architecture
+🧠 Design Decisions
 
-✅ Real API integrations
+Agent separation → clear responsibility boundaries
 
-✅ Clear limitations documented
+Structured JSON plans → safe, auditable execution
 
-✅ Internship / production ready
+LLM abstraction → switch providers easily
+
+Retry & fallback logic → resilient API calls
+
+Single codebase → CLI + API from same logic
+
+
+🧪 Testing
+python main.py "Find Python repos" --provider groq
+python main.py "Weather in Tokyo" --provider groq
+python main.py --api
+
+
+🐛 Common Issues
+
+API key not found
+
+Ensure .env exists
+
+Verify key activation (Weather API may take 2–4 hours)
+
+GitHub rate limit
+
+Add GITHUB_TOKEN
+
+Invalid JSON from LLM
+
+Use --provider groq
+
+Ensure stable internet
+
+
+🔮 Future Improvements
+
+Parallel API execution
+
+Response caching
+
+Async support
+
+More tools (DB, Email, Slack)
+
+Cost tracking
+
+Circuit breakers
+
+
+📄 License
+
+MIT License
+
+Built with ❤️ using Python, FastAPI, Groq/OpenAI/Gemini, and real-world backend practices
