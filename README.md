@@ -1,34 +1,30 @@
 AI Operations Assistant
 
-
 A production-ready multi-agent AI system that plans, executes, and verifies real API calls using LLM-powered agents.
 Designed to demonstrate agent orchestration, API integrations, and clean backend architecture.
 
 
-🚀 Quick Start
+Quick Start
+
 # 1. Go to project
 cd ai_ops_assistant
 
-
 # 2. Install dependencies
 pip install -r requirements.txt
-
 
 # 3. Configure environment
 cp .env.example .env
 # Add: GROQ_API_KEY, WEATHER_API_KEY (GitHub token optional)
 
-
 # 4. Run CLI
 python main.py "Find top 3 Python repos and weather in Bangalore" --provider groq
-
 
 # OR start API server
 python main.py --api
 # Visit: http://localhost:8000/docs
 
 
-🎯 Overview
+Overview
 
 This project showcases a multi-agent AI Operations system where:
 
@@ -41,7 +37,7 @@ VerifierAgent → Validates results and formats final output
 The system supports CLI and API modes, multiple LLM providers, and production-grade error handling.
 
 
-✨ Key Features
+Key Features
 
 Multi-agent architecture (Planner / Executor / Verifier)
 
@@ -60,7 +56,8 @@ Environment-based configuration
 Clean, extensible architecture
 
 
-🏗️ Architecture Flow
+Architecture Flow
+
 User Query
    ↓
 PlannerAgent (LLM → JSON Plan)
@@ -71,7 +68,9 @@ VerifierAgent (Validation + Formatting)
    ↓
 Final Structured Response
 
-📁 Project Structure
+
+Project Structure
+
 ai_ops_assistant/
 ├── agents/
 │   ├── planner.py
@@ -89,22 +88,21 @@ ai_ops_assistant/
 └── README.md
 
 
-🔑 Environment Variables
+Environment Variables
+
 # LLM (choose one)
 GROQ_API_KEY=...
 OPENAI_API_KEY=...
 GEMINI_API_KEY=...
 
-
 # Required
 WEATHER_API_KEY=...
-
 
 # Optional (rate limits)
 GITHUB_TOKEN=...
 
 
-🔐 API Key Sources
+API Key Sources
 
 Groq: https://console.groq.com/keys
 
@@ -117,7 +115,8 @@ OpenAI: https://platform.openai.com/api-keys
 Gemini: https://makersuite.google.com/app/apikey
 
 
-💻 Running the Project
+Running the Project
+
 CLI Mode
 python main.py "Find top 3 Python repos and weather in Bangalore" --provider groq
 python main.py "Weather in Delhi" --provider groq
@@ -136,7 +135,8 @@ GET /health → Service status
 GET /docs → Swagger UI
 
 
-📊 Example Output
+Example Output
+
 {
   "status": "success",
   "results": {
@@ -158,7 +158,7 @@ GET /docs → Swagger UI
 }
 
 
-🧠 Design Decisions
+Design Decisions
 
 Agent separation → clear responsibility boundaries
 
@@ -171,13 +171,14 @@ Retry & fallback logic → resilient API calls
 Single codebase → CLI + API from same logic
 
 
-🧪 Testing
+Testing
+
 python main.py "Find Python repos" --provider groq
 python main.py "Weather in Tokyo" --provider groq
 python main.py --api
 
 
-🐛 Common Issues
+Common Issues
 
 API key not found
 
@@ -196,7 +197,8 @@ Use --provider groq
 Ensure stable internet
 
 
-🔮 Future Improvements
+Future Improvements
+
 
 Parallel API execution
 
@@ -216,3 +218,4 @@ Circuit breakers
 MIT License
 
 Built with ❤️ using Python, FastAPI, Groq/OpenAI/Gemini, and real-world backend practices
+
